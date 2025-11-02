@@ -1,0 +1,17 @@
+@PostMapping("/chat")
+public ResponseEntity<?> chat(@RequestBody ChatRequest request) {
+    // Validate user, log query, etc.
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    Map<String, String> payload = Map.of(
+        "query", request.getQuery(),
+        "user_id", request.getUserId()
+    );
+
+    HttpEntity<Map<String, String>> entity = new HttpEntity<>(payload, headers);
+    ResponseEntity<Map> response = restTemplate.postForEntity("http://localhost:8000/chat", entity, Map.class);
+
+    return ResponseEntity.ok(response.getBody());
+}
